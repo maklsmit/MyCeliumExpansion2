@@ -30,6 +30,8 @@ public class Squirrel : MonoBehaviour
     private bool shooing = false;
 
     private Vector3 lastVelocity = Vector3.zero;
+    private float shooingTime = 7.5f;
+    private float health = 50;
 
     void Start()
     {
@@ -44,7 +46,7 @@ public class Squirrel : MonoBehaviour
         {
             if(targetMushroom == null)
             {
-                Debug.Log("No target mushroom, finding one");
+                // Debug.Log("No target mushroom, finding one");
                 GameObject[] mushrooms = GameObject.FindGameObjectsWithTag("Mushroom");
 
                 List<GameObject> activeMushrooms = new List<GameObject>(mushrooms.Length);
@@ -174,6 +176,36 @@ public class Squirrel : MonoBehaviour
         if(other.CompareTag("Broom") && shooing == false)
         {
             Debug.Log("Encountered Broom!");
+
+            health -= 5;
+            if(health <= 0){
+                Destroy(gameObject);
+            }
+            Debug.Log(health);
+
+            shooing = true;
+            targetMushroom = null;
+            rb.velocity = lastVelocity * -1.25f;
+            if(rb.velocity.x > 0)
+            {
+                anim.SetTrigger("RunRight");
+                animState = SquirrelAnim.RUN_RIGHT;
+            }
+            else
+            {
+                anim.SetTrigger("RunLeft");
+                animState = SquirrelAnim.RUN_LEFT;
+            }
+            digSound.Stop();
+            runSound.Play();
+            StartCoroutine(StopFleeing());
+        }
+        else if(other.CompareTag("Spell") && shooing == false){
+            Destroy(other.gameObject);
+            health -= 15;
+            if(health <= 0){
+                Destroy(gameObject);
+            }
             shooing = true;
             targetMushroom = null;
             rb.velocity = lastVelocity * -1.25f;
@@ -195,12 +227,16 @@ public class Squirrel : MonoBehaviour
 
     private IEnumerator StopFleeing()
     {
-        yield return new WaitForSeconds(7.5f);
+        yield return new WaitForSeconds(shooingTime); //This 7.5f would be the change for fleeing longer
         shooing = false;
         rb.velocity = Vector3.zero;
         anim.SetTrigger("Idle");
         animState = SquirrelAnim.IDLE;
         runSound.Stop();
+    }
+
+    public void UpgradeShooingTime(){
+        shooingTime = shooingTime * 1.3f;
     }
 }
 

@@ -19,6 +19,7 @@ public class GameplayTree : MonoBehaviour
     public float logTime = 10f;
 
     public float fallTime = 1f;
+    private float degradationMultiplier = 1f;
 
     public int sporeReward = 200;
 
@@ -34,22 +35,22 @@ public class GameplayTree : MonoBehaviour
 
         if (captureVariety == 0)
         {
-            captureTime = 10f;
-            logTime = 10f;
+            captureTime = 10f * degradationMultiplier;
+            logTime = 10f * degradationMultiplier;
             fallTime = 1f;
         } else if (captureVariety == 1)
         {
-            captureTime = 30f;
-            logTime = 30f;
+            captureTime = 30f * degradationMultiplier;
+            logTime = 30f * degradationMultiplier;
             fallTime = 1f;
         } else if (captureVariety == 2)
         {
-            captureTime = 4f;
-            logTime = 4f;
+            captureTime = 4f * degradationMultiplier;
+            logTime = 4f * degradationMultiplier;
             fallTime = 1f;
         } else {
-            captureTime = 5f;
-            logTime = 5f;
+            captureTime = 5f * degradationMultiplier;
+            logTime = 5f * degradationMultiplier;
             fallTime = 1f;
         }
         
@@ -108,5 +109,15 @@ public class GameplayTree : MonoBehaviour
         dust.Play();
         GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>().AddSpores(captureVariety, sporeReward);
         // play particle effect
+    }
+
+    //Updates the degradation multiplier
+    public void UpgradeDegradationMult(){
+        if(degradationMultiplier == 1){
+            degradationMultiplier = 0.85f;
+        }
+        else if(degradationMultiplier < 1){
+            degradationMultiplier = 0.6f;
+        }
     }
 }

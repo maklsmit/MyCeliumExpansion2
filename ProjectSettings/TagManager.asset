@@ -12,6 +12,8 @@ TagManager:
   - GameplayManager
   - Broom
   - Hut
+  - Squirrel
+  - Spell
   layers:
   - Default
   - TransparentFX

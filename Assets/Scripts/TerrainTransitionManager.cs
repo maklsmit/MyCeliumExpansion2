@@ -48,7 +48,7 @@ public class TerrainTransitionManager : MonoBehaviour
         ClearBuffers();
         GameObject[] mushroomObjs = GameObject.FindGameObjectsWithTag("Mushroom");
 
-        Debug.Log($"Terrain manager found {mushroomObjs.Length} mushrooms");
+        // Debug.Log($"Terrain manager found {mushroomObjs.Length} mushrooms");
 
         List<MushroomNode> mushrooms = new List<MushroomNode>(mushroomObjs.Length); // TODO get from somewhere
         for(int i = 0, count = mushroomObjs.Length; i < count; i++)

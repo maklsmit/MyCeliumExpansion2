@@ -38,6 +38,9 @@ public class PopUpScreens : MonoBehaviour
 
     private GameplayManager gameplayManager;
 
+    private Slider spellSlider;
+    private GameObject faultyTree;
+
     void Start()
     {
         sporeOneText = GameObject.Find("CauldronUpgrade/Currency/Currency1/Count").GetComponent<TextMeshProUGUI>();
@@ -55,6 +58,35 @@ public class PopUpScreens : MonoBehaviour
         sporeFourCounter = GameObject.Find("SporeCounter/Spore4").GetComponent<TextMeshProUGUI>();
         textObject = GameObject.Find("PopUpInstruction/PopUp").GetComponent<TextMeshProUGUI>();
         gameplayManager = GameObject.FindWithTag("GameplayManager").GetComponent<GameplayManager>();
+        spellSlider = GameObject.Find("SporeCounter/SpellSlider").GetComponent<Slider>();
+        faultyTree = GameObject.Find("PopUpScreens/Upgrades/UpgradeView/Centerer/PathHeight/SkillTree1 (1)");
+    }
+
+    void Update(){
+        if(spellSlider.transform.GetChild(0).GetComponent<Image>().enabled){
+            if(spellSlider.value < spellSlider.maxValue){
+                spellSlider.value += 1 * Time.deltaTime;
+                if(spellSlider.value > 20){
+                    Image image = spellSlider.transform.GetChild(1).GetChild(0).GetComponent<Image>();
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, 0.843f);
+                }
+            }
+        }
+    }
+
+    public void SpawnSpell(){
+        if(spellSlider.value == 40){
+            spellSlider.value = 0;
+        }
+        else{
+            spellSlider.value -= 20;
+        }
+        Graphic image = spellSlider.transform.GetChild(1).GetChild(0).GetComponent<Graphic>();
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 1f);
+    }
+
+    public float SpellSliderValue(){
+        return spellSlider.value;
     }
 
     public void LongRangeSpell(GameObject button)
@@ -65,6 +97,7 @@ public class PopUpScreens : MonoBehaviour
             gameplayManager.SetSpore1(gameplayManager.GetSpore1() - 3000);
             UpdateSporeCounter();
             sporeOneTextWitch.text = gameplayManager.GetSpore1().ToString();
+            spellSlider.transform.GetChild(0).GetComponent<Image>().enabled = true;
         }
     }
 
@@ -76,10 +109,11 @@ public class PopUpScreens : MonoBehaviour
             gameplayManager.SetSpore3(gameplayManager.GetSpore3() - 3000);
             UpdateSporeCounter();
             sporeThreeTextWitch.text = gameplayManager.GetSpore3().ToString();
+            spellSlider.maxValue = 40f;
         }
     }
 
-    public void BroomPlus(GameObject button)
+    public void BroomPlus(GameObject button) //Add var to make scurrying longer, figure out who changes it
     {
         if (gameplayManager.GetSpore2() >= 2500)
         {
@@ -87,10 +121,11 @@ public class PopUpScreens : MonoBehaviour
             gameplayManager.SetSpore2(gameplayManager.GetSpore2() - 2500);
             UpdateSporeCounter();
             sporeTwoTextWitch.text = gameplayManager.GetSpore2().ToString();
+            gameplayManager.UpgradeBroom();
         }
     }
 
-    public void TreeKnockdown(GameObject button)
+    public void TreeKnockdown(GameObject button) //Add var to multiply to tree time
     {
         if (gameplayManager.GetSpore1() >= 6000)
         {
@@ -98,10 +133,11 @@ public class PopUpScreens : MonoBehaviour
             gameplayManager.SetSpore1(gameplayManager.GetSpore1() - 6000);
             UpdateSporeCounter();
             sporeOneTextWitch.text = gameplayManager.GetSpore1().ToString();
+            gameplayManager.UpgradeKnockDown();
         }
     }
 
-    public void StrongerKnockdown(GameObject button)
+    public void StrongerKnockdown(GameObject button) //^ but change the var
     {
         if (gameplayManager.GetSpore3() >= 6000)
         {
@@ -109,6 +145,7 @@ public class PopUpScreens : MonoBehaviour
             gameplayManager.SetSpore3(gameplayManager.GetSpore3() - 6000);
             UpdateSporeCounter();
             sporeThreeTextWitch.text = gameplayManager.GetSpore1().ToString();
+            gameplayManager.UpgradeKnockDown();
         }
     }
 
@@ -179,6 +216,7 @@ public class PopUpScreens : MonoBehaviour
     public void EnableWitchUpgrade()
     {
         witchUpgrade.GetComponent<Canvas>().enabled = true;
+        faultyTree.SetActive(true);
         sporeOneTextWitch.text = gameplayManager.GetSpore1().ToString();
         sporeTwoTextWitch.text = gameplayManager.GetSpore2().ToString();
         sporeThreeTextWitch.text = gameplayManager.GetSpore3().ToString();
@@ -187,6 +225,7 @@ public class PopUpScreens : MonoBehaviour
     public void DisableWitchUpgrade()
     {
         witchUpgrade.GetComponent<Canvas>().enabled = false;
+        faultyTree.SetActive(false);
     }
 
     public void EnableTextPopUpUpgrade(string popUp)

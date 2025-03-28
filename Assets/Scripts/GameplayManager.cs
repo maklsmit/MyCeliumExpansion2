@@ -88,6 +88,22 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    //Goes through each squirrel and upgrades its shooing time, meaning it runs away from the player longer
+    public void UpgradeBroom(){
+        GameObject[] squirrels = GameObject.FindGameObjectsWithTag("Squirrel");
+        foreach(GameObject squirrel in squirrels){
+            squirrel.GetComponent<Squirrel>().UpgradeShooingTime();
+        }
+    }
+
+    //Goes through each gameplay tree and upgrades the degradation multiplier, meaning the trees fall down quicker
+    public void UpgradeKnockDown(){
+        Transform gameplayTreeHolder = GameObject.Find("GameplayTrees").transform;
+        foreach(Transform gameplayTree in gameplayTreeHolder){
+            gameplayTree.gameObject.GetComponent<GameplayTree>().UpgradeDegradationMult();
+        }
+    }
+
     public enum gameState
     {
         Level1,

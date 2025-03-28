@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
 
     private bool enableKey = false;
     public GameObject objectToSpawn;
+    public GameObject spell;
+    public GameObject longSpell;
     public Vector3 mushroomOffset;
 
     public VisualEffect dustRight;
@@ -103,6 +105,7 @@ public class Player : MonoBehaviour
         if(animState != AnimationState.ATK_R || animState != AnimationState.ATK_L)
         {
             SpawnMushroom();
+            SpawnSpell();
             if(horizontalMovement == 0f && verticalMovement == 0f)
             {
                 if(animState == AnimationState.RUN_R)
@@ -194,6 +197,19 @@ public class Player : MonoBehaviour
             Debug.Log("Pressed e");
 
             circleMenu.Pause();
+        }
+    }
+
+    void SpawnSpell(){
+        if(Input.GetKeyDown(KeyCode.F)){
+            if(popUp.SpellSliderValue() == 40){
+                Instantiate(longSpell, transform.position, Quaternion.Euler(0, 0, 90f));
+                popUp.SpawnSpell();
+            }
+            else if(popUp.SpellSliderValue() >= 20){
+                Instantiate(spell, transform.position, Quaternion.Euler(0, 0, 90f));
+                popUp.SpawnSpell();
+            }
         }
     }
 
